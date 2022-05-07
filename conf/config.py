@@ -15,5 +15,8 @@ CONFIG = {
         "person_id",
         "name",
         "email"
-    ]
+    ],
+    "event_table": "event",
+    "person_table": "person",
+    "participant_table": "participants"
 }

@@ -3,6 +3,9 @@ from fastapi import FastAPI, Response
 from conf.config import CONFIG
 from utils.sql_builder import SQLBuilder
 
+from app.person import Person
+from app.event import Event
+
 app = FastAPI()
 
 
@@ -45,3 +48,12 @@ async def get_person(person_id: int):
     r = builder.read_from_table_by_id(c, 'person', person_id)
     data = builder.load_person_into_pd(r)
     return Response(content = builder.df_to_json(data))
+
+@app.post("/people")
+async def add_person(person: Person):
+    print(person.name)
+    return person
+
+@app.post("/event")
+async def add_event(event: Event):
+    return event

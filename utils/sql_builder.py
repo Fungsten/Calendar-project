@@ -1,5 +1,5 @@
 import json
-from operator import index
+from typing import List
 
 import mysql.connector
 import pandas as pd
@@ -16,6 +16,9 @@ class SQLBuilder():
 
         self.event_headers = CONFIG.get("event_headers")
         self.person_headers = CONFIG.get("person_headers")
+
+        self.person_count = 0
+        self.event_count = 0
 
     def create_server_connection(self):
         connection = None
@@ -63,6 +66,8 @@ class SQLBuilder():
             print("Query successful")
         except Error as err:
             print(f"Error: '{err}'")
+            return False
+        return True
 
     def execute_query_result(self, connection, query: str):
         cursor = connection.cursor()
@@ -106,3 +111,32 @@ class SQLBuilder():
     def read_from_table_by_id(self, connection, table: str, id: str):
         query = f"SELECT * FROM {table} where {table}_id={id}"
         return self.execute_query_result(connection, query)
+
+    def add_person(self, connection, name, email):
+        query = f'''
+        INSERT INTO person VALUES
+        ({self.person_count + 1}, {name}, {email});
+        '''
+        if self.execute_query(connection, query):
+            self.person_count += 1
+
+    def add_event(self, connection, 
+                    name: str, 
+                    location: str, 
+                    start_time, 
+                    end_time, 
+                    is_all_day: bool,
+                    participants: List[int]):
+        query = f'''
+        INSERT INTO event VALUES
+        ({self.event_count + 1}, {name}, {location}, {start_time}, {end_time}, {is_all_day});
+        '''
+        if self.execute_query(connection, query):
+            self.event_count += 1
+
+        for participant in participants:
+            add_participant = f'''
+            INSERT INTO participate_event
+            ({participant}, {self.event_count})
+            '''
+            self.execute_query(connection, add_participant)

@@ -1,8 +1,6 @@
+from pydantic import BaseModel
+from typing import Optional
 
-class Person():
-
-    def __init__(self) -> None:
-        self.name = None
-        self.id = None
-        self.email = None
-        self.events_in = []
+class Person(BaseModel):
+    name: str
+    email: str
