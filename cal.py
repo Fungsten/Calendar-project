@@ -8,6 +8,11 @@ class Cal():
         pass
 
 if __name__=="__main__":
+    '''
+    This thing sets the initial state of our MySQL database
+    so that we have a consistent start state for testing and
+    demonstration purposes.
+    '''
     builder = SQLBuilder()
     c = builder.create_server_connection()
     builder.hard_reset(c, "calendar")
@@ -18,20 +23,22 @@ if __name__=="__main__":
 
     create_events_table = '''
     CREATE TABLE event (
-        event_id INT PRIMARY KEY,
+        event_id INT NOT NULL AUTO_INCREMENT,
         name VARCHAR(40) NOT NULL,
         location VARCHAR(40) NOT NULL,
         start_time DATETIME,
         end_time DATETIME,
-        is_all_day BOOL NOT NULL
+        is_all_day BOOL NOT NULL,
+        PRIMARY KEY (event_id)
     );
     '''
 
     create_person_table = '''
     CREATE TABLE person (
-        person_id INT PRIMARY KEY,
+        person_id INT NOT NULL AUTO_INCREMENT,
         name VARCHAR(40) NOT NULL,
-        email VARCHAR(40) NOT NULL
+        email VARCHAR(40) NOT NULL,
+        PRIMARY KEY (person_id)
     );
     '''
 
@@ -59,7 +66,7 @@ if __name__=="__main__":
     (5, 'Pikachu', 'pika@kanto.pok'),
     (6, 'Fox McCloud', 'starfox@corneria.pla'),
     (7, 'Kirby', 'kirby@dream.land'),
-    (8, 'Yoshi', 'notyoshi@taxevasion.isle')
+    (8, 'Yoshi', 'notyoshi@taxevasion.isle');
     '''
 
     builder.execute_query(b, populate_people)

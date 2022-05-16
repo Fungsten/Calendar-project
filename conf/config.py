@@ -18,5 +18,5 @@ CONFIG = {
     ],
     "event_table": "event",
     "person_table": "person",
-    "participant_table": "participants"
+    "participant_table": "participate_event"
 }
